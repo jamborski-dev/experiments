@@ -36,22 +36,28 @@
 }
 
 .multiselect section {
-  padding: 0.5rem;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
   max-height: 150px;
   overflow-y: scroll;
   background-color: white;
-  border: 1px solid #d2d2d2;
 }
 
 .multiselect .multiselect-item {
-  width: 45%;
+  width: calc(50% - 2px);
   padding-block: 0.2rem;
   display: flex;
   align-items: center;
   gap: 0.2rem;
+  border-bottom: 1px solid rgb(175, 175, 175);
+}
+
+.multiselect .multiselect-item:nth-child(odd) {
+  border-right: 1px solid rgb(201, 201, 201);
+}
+
+.multiselect .multiselect-item:last-child {
+  border-bottom: none;
 }
 
 .multiselect .multiselect-item input {
