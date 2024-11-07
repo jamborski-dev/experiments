@@ -4,21 +4,19 @@ import { Multiselect } from "./Multiselect"
 
 const input = "Sales:0,Calls:0,Samples:0"
 
-const filterByVariable = (variable: string, value: string) => {
+const filterByVariable = (variable: string) => (value: string) => {
   console.log(variable, value)
 }
 
 function App() {
   const handleFilter = (result: string) => {
-    console.log(result)
-
-    filterByVariable("qVariable", result)
+    filterByVariable("qVariable")(result)
   }
 
   return (
-    <>
-      <Multiselect input={input} callback={handleFilter} />
-    </>
+    <div className="ms-container">
+      <Multiselect title={"Title"} input={input} onUpdate={handleFilter} enableClear />
+    </div>
   )
 }
 

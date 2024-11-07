@@ -1,11 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ChangeEvent, FC, useEffect, useState } from "react"
+import { RiEraserLine } from "react-icons/ri"
 
 // "Sales:0,Calls:0,Samples:0"
 
 interface MultiselectProps {
+  title: string
   input: string
-  callback: any
+  onUpdate: (value: string) => void
+  enableClear?: boolean
 }
 
 interface Item {
@@ -13,7 +16,12 @@ interface Item {
   value: number
 }
 
-export const Multiselect: FC<MultiselectProps> = ({ input, callback }) => {
+export const Multiselect: FC<MultiselectProps> = ({
+  title,
+  input,
+  onUpdate,
+  enableClear = true
+}) => {
   const [items, setItems] = useState<Item[]>(parseIn(input))
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -29,26 +37,46 @@ export const Multiselect: FC<MultiselectProps> = ({ input, callback }) => {
     })
   }
 
+  const handleClear = () => {
+    setItems(prev => {
+      return prev.map(item => {
+        return { name: item.name, value: 0 }
+      })
+    })
+  }
+
   useEffect(() => {
-    callback(parseOut(items))
+    const parsed = parseOut(items)
+    if (parsed === input) return
+    onUpdate(parsed)
   }, [items])
 
   if (!items) return null
 
   return (
     <div className="multiselect">
-      {items.map((item, index) => (
-        <div key={index} className="multiselect-item">
-          <input
-            type="checkbox"
-            id={item.name}
-            name={item.name}
-            checked={Boolean(item.value)}
-            onChange={handleOnChange}
-          />
-          <label htmlFor={item.name}>{item.name}</label>
-        </div>
-      ))}
+      <header>
+        <h3>{title}</h3>
+        {enableClear && (
+          <button type="button" className="btn-clear" onClick={handleClear}>
+            <RiEraserLine />
+          </button>
+        )}
+      </header>
+      <section>
+        {items.map((item, index) => (
+          <div key={index} className="multiselect-item">
+            <input
+              type="checkbox"
+              id={item.name}
+              name={item.name}
+              checked={Boolean(item.value)}
+              onChange={handleOnChange}
+            />
+            <label htmlFor={item.name}>{item.name}</label>
+          </div>
+        ))}
+      </section>
     </div>
   )
 }
